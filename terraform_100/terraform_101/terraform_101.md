@@ -153,7 +153,6 @@ block where the source input is set to a local directory called
 
 ```
 module "sccm_sn" {
-
 source = "./terraform_naming_module"
     resource_type_input = "subnet"
     business_unit_input = "${var.business_unit}"
