@@ -5,7 +5,31 @@
 
 # Terraform 102
 
-## 1.2.1 Provider Blocks
+## 1.2.1 Terraform State
+
+Known resource states are stored as JSON data in a [state
+file](https://www.terraform.io/docs/state/) which Terraform references when
+running a plan or apply step to decide whether any resources will be created,
+changed, or destroyed. When running Terraform locally, a state file is
+automatically created when a plan or apply command is given to Terraform.
+
+At plan/apply time, Terraform compares the current state of resources with their
+expected state in the state file. If a resource deviates from expected state, it
+will be recreated during an apply step. Also, if a configuration step fails
+during apply then the resource will be marked as tainted for further
+remediation. [Workspaces](https://www.terraform.io/docs/state/workspaces.html)
+are used to separate code level environment state files from one another while
+still using a common set of Terraform configuration files.
+
+
+### 1.2.1.1 Remote State Files
+
+It is best practice to use a [remote state
+file](https://www.terraform.io/docs/state/remote.html) when working in a team. If team members each had
+their own copy of the state file, resource consistency would be lost.
+State files are stored remotely in a storage account per the remote backend configuration given to Terraform.
+
+## 1.2. Provider Blocks
 
 Terraform connects to a myriad of infrastructure solutions using intermediate
 API translators called [providers](https://www.terraform.io/docs/providers/). For instance, the
@@ -37,7 +61,7 @@ provider "azurerm" {
 }
 ```
 
-## 1.2.2 Modules
+## 1.2. Modules
 
 
 Terraform [modules](https://www.terraform.io/docs/modules/index.html) simply
@@ -73,28 +97,3 @@ resources with slightly different names, sizes, shapes, etc. without reinventing
 the wheel every time. Not only does this save time and effort, but can help
 maintain consistency between infrastructure admins within an organization since
 they can all use the same set of standardized modules in their work.
-
-## 1.2.3 Terraform State
-
-
-Known resource states are stored as JSON data in a [state
-file](https://www.terraform.io/docs/state/) which Terraform references when
-running a plan or apply step to decide whether any resources will be created,
-changed, or destroyed. When running Terraform locally, a state file is
-automatically created when a plan or apply command is given to Terraform.
-However, it is best practice to use a [remote state
-file](https://www.terraform.io/docs/state/remote.html) when working in a team
-since state files need to be locked during deployments. If team members each had
-their own copy of the state file, resource consistency will be lost.
-
-At plan/apply time, Terraform compares the current state of resources with their
-expected state in the state file. If a resource deviates from expected state, it
-will be recreated during an apply step. Also, if a configuration step fails
-during apply then the resource will be marked as tainted for further
-remediation. [Workspaces](https://www.terraform.io/docs/state/workspaces.html)
-are used to separate code level environment state files from one another while
-still using a common set of Terraform configuration files.
-
-State files will be stored remotely in an Azure storage account per code level
-environment. Each code level environment state file will be referred to using
-Terraform workspaces.
