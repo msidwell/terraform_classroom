@@ -1,11 +1,11 @@
 - [Terraform 101](#terraform-101)
-  - [1.1 Basics](#11-basics)
-  - [1.2 Resource Blocks](#12-resource-blocks)
-  - [1.3 Variable Blocks](#13-variable-blocks)
-  - [1.4 Provider Blocks](#14-provider-blocks)
-  - [1.5 Modules](#15-modules)
-  - [1.6 Terraform State](#16-terraform-state)
-  - [1.7 Terraform Commands](#17-terraform-commands)
+  - [1.1.1 Basics](#111-basics)
+  - [1.1.2 Resource Blocks](#112-resource-blocks)
+  - [1.1.3 Variable Blocks](#113-variable-blocks)
+  - [1.1.4 Provider Blocks](#114-provider-blocks)
+  - [1.1.5 Modules](#115-modules)
+  - [1.1.6 Terraform State](#116-terraform-state)
+  - [1.1.7 Terraform Commands](#117-terraform-commands)
 - [Labs](#labs)
   - [Exercise 1: Creating a Resource](#exercise-1-creating-a-resource)
   - [Exercise 2: Using Variables](#exercise-2-using-variables)
@@ -14,7 +14,7 @@
 
 # Terraform 101
 
-## 1.1 Basics
+## 1.1.1 Basics
 
 Terraform is an open source Infrastructure-as-Code (IaC) solution for
 idempotent multi-cloud infrastructure management. Infrastructure components are
@@ -30,7 +30,7 @@ break up a set of configuration files into directories with separate variable
 files. File structure and file distribution can change depending on the
 complexity and needs of a given deployment.
 
-## 1.2 Resource Blocks
+## 1.1.2 Resource Blocks
 
 [Resource blocks](https://www.terraform.io/docs/configuration/resources.html)
 within Terraform files consist of a **resource** declaration with all associated
@@ -60,7 +60,7 @@ At Brunswick, these resource blocks will account for the majority of Terraform
 code written. They will be used to define all Azure resources that are buildable
 using the azurerm provider.
 
-## 1.3 Variable Blocks
+## 1.1.3 Variable Blocks
 
 [Variables](https://www.terraform.io/docs/configuration/variables.html) in Terraform 
 are declared using variable blocks like the example below. They have type, description, 
@@ -104,7 +104,7 @@ declared in a dedicated variables file. Secure variable declarations will exist
 in the master variable file, but associated values will be stored in a
 separately stored values file in secure storage for use during package build.
 
-## 1.4 Provider Blocks
+## 1.1.4 Provider Blocks
 
 Terraform connects to a myriad of infrastructure solutions using intermediate
 API translators called [providers](https://www.terraform.io/docs/providers/). For instance, the
@@ -136,7 +136,7 @@ provider "azurerm" {
 }
 ```
 
-## 1.5 Modules
+## 1.1.5 Modules
 
 
 Terraform [modules](https://www.terraform.io/docs/modules/index.html) simply
@@ -174,7 +174,7 @@ the wheel every time. Not only does this save time and effort, but can help
 maintain consistency between infrastructure admins within an organization since
 they can all use the same set of standardized modules in their work.
 
-## 1.6 Terraform State
+## 1.1.6 Terraform State
 
 
 Known resource states are stored as JSON data in a [state
@@ -199,7 +199,7 @@ State files will be stored remotely in an Azure storage account per code level
 environment. Each code level environment state file will be referred to using
 Terraform workspaces.
 
-## 1.7 Terraform Commands
+## 1.1.7 Terraform Commands
 
 The Terraform CLI has a compact set of commands for managing deployments. The
 general flow of a Terraform deployment consists of init, plan, and apply steps.
@@ -234,7 +234,7 @@ Create a resource block for your preferred resource provider. Good starting reso
 
 Test the structure of your .tf file by running ```terraform init``` or ```terraform validate```. Make sure you try actually deploying the resource by using your preferred CLI to login to the resource provider and running ```terraform apply```. For instance, log into the [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html) using ```aws configure``` or log into the [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/reference-index?view=azure-cli-latest#az-login) using ```az login```
 
-Your answer should look similar to the example provided in [section 1.2](#12-resource-blocks)
+Your answer should look similar to the example provided in [section 1.1.2](#12-resource-blocks)
 
 ## Exercise 2: Using Variables
 
@@ -243,7 +243,7 @@ into variable references. This requires that you declare a variable block for ea
 
 As before, make sure to test your configuration using a combination of ```terraform init```, ```terraform validate```, and ```terraform apply```. You will be asked to input values for your variables at plan/apply time.
 
-Your resource block should look similar to the resource example in [section 1.3](#13-variable-blocks), and it should be accompanied by a number of variable blocks which look like the example declaration in that same section.
+Your resource block should look similar to the resource example in [section 1.1.3](#13-variable-blocks), and it should be accompanied by a number of variable blocks which look like the example declaration in that same section.
 
 ## Exercise 3: Organizing with .tf Files
 
