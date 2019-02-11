@@ -1,7 +1,12 @@
 - [Terraform 102](#terraform-102)
-  - [1.2.1 Provider Blocks](#121-provider-blocks)
-  - [1.2.2 Modules](#122-modules)
-  - [1.2.3 Terraform State](#123-terraform-state)
+  - [1.2.1 Terraform State](#121-terraform-state)
+    - [1.2.1.1 Remote State Files](#1211-remote-state-files)
+  - [1.2.2 Provider Blocks](#122-provider-blocks)
+  - [1.2.3 Modules](#123-modules)
+- [Labs](#labs)
+  - [Exercise 1: Using a Remote State File](#exercise-1-using-a-remote-state-file)
+  - [Exercise 2: Securing Your Environment with a Service Principle](#exercise-2-securing-your-environment-with-a-service-principle)
+  - [Exercise 3: Leveraging Modules to Save on Duplicate Code](#exercise-3-leveraging-modules-to-save-on-duplicate-code)
 
 # Terraform 102
 
@@ -24,12 +29,19 @@ still using a common set of Terraform configuration files.
 
 ### 1.2.1.1 Remote State Files
 
-It is best practice to use a [remote state
-file](https://www.terraform.io/docs/state/remote.html) when working in a team. If team members each had
-their own copy of the state file, resource consistency would be lost.
-State files are stored remotely in a storage account per the remote backend configuration given to Terraform.
+It is best practice to use a [remote state file](https://www.terraform.io/docs/state/remote.html) when working in a team. If team members each had their own copy of the state file, resource consistency would be lost since everyone would be working outside of a "single source of truth". In this scenario, state files are stored remotely in a storage account per the remote backend configuration given to Terraform. Remote state configuration is defined with a [backend](https://www.terraform.io/docs/backends) in a ```terraform``` block like the following example which would store state in an AWS S3 bucket in the US East 2 region.
 
-## 1.2. Provider Blocks
+```
+terraform {
+  backend "s3" {
+    bucket = "my-fresh-bucket"
+    key    = "secret/path/to/my/secret/key"
+    region = "us-east-2"
+  }
+}
+```
+
+## 1.2.2 Provider Blocks
 
 Terraform connects to a myriad of infrastructure solutions using intermediate
 API translators called [providers](https://www.terraform.io/docs/providers/). For instance, the
@@ -61,7 +73,7 @@ provider "azurerm" {
 }
 ```
 
-## 1.2. Modules
+## 1.2.3 Modules
 
 
 Terraform [modules](https://www.terraform.io/docs/modules/index.html) simply
@@ -97,3 +109,11 @@ resources with slightly different names, sizes, shapes, etc. without reinventing
 the wheel every time. Not only does this save time and effort, but can help
 maintain consistency between infrastructure admins within an organization since
 they can all use the same set of standardized modules in their work.
+
+# Labs
+
+## Exercise 1: Using a Remote State File
+
+## Exercise 2: Securing Your Environment with a Service Principle
+
+## Exercise 3: Leveraging Modules to Save on Duplicate Code
