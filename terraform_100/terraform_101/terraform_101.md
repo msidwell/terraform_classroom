@@ -39,10 +39,10 @@ block which defines a subnet in Azure.
 
 ```
 resource "azurerm_subnet" "subnet001" {
-    name = "mySubnet"
+    name                 = "mySubnet"
     virtual_network_name = "myVnet"
-    resource_group_name = "myRG"
-    address_prefix = "10.0.0.0/27"
+    resource_group_name  = "myRG"
+    address_prefix       = "10.0.0.0/27"
 }
 ```
 The two strings after **resource** are the resource type and resource ID
@@ -71,9 +71,9 @@ explicitly set.
 
 ```
 variable "dataDiskCaching" {
-  type = "string"
+  type        = "string"
   description = "Caching for data disk (None, ReadOnly, or ReadWrite)"
-  default = "ReadOnly"
+  default     = "ReadOnly"
 }
 ```
 
@@ -128,11 +128,11 @@ files.
 
 ```
 provider "azurerm" {
-    version = "~> 1.19"
+    version         = "~> 1.19"
     subscription_id = "${var.azure_sub_id}"
-    client_id = "${var.azure_client_id}"
-    client_secret = "${var.azure_client_secret}"
-    tenant_id = "${var.azure_tenant_id}"
+    client_id       = "${var.azure_client_id}"
+    client_secret   = "${var.azure_client_secret}"
+    tenant_id       = "${var.azure_tenant_id}"
 }
 ```
 
@@ -153,13 +153,13 @@ block where the source input is set to a local directory called
 
 ```
 module "sccm_sn" {
-source = "./terraform_naming_module"
-    resource_type_input = "subnet"
-    business_unit_input = "${var.business_unit}"
-    workload = "SCCM"
-    environment_input = "${var.environment}"
-    location_descriptor_input = "${var.location}"
-    naming_index = "01"
+    source                        = "./terraform_naming_module"
+        resource_type_input       = "subnet"
+        business_unit_input       = "${var.business_unit}"
+        workload                  = "SCCM"
+        environment_input         = "${var.environment}"
+        location_descriptor_input = "${var.location}"
+        naming_index              = "01"
 }
 ```
 
