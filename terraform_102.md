@@ -100,7 +100,7 @@ module "sccm_sn" {
 }
 ```
 
-This block not only calls a module, but also passes variables into the module to
+This block calls a module and passes variables into the module to
 use during processing. In addition, modules can use output blocks to pass
 resource information and calculated values back to the parent module after
 processing. Between module inputs and outputs, their value in repeatability
@@ -113,6 +113,8 @@ they can all use the same set of standardized modules in their work.
 # Labs
 
 ## Exercise 1: Using a Remote State File
+
+
 
 ## Exercise 2: Securing Your Environment with a Service Principle
 
