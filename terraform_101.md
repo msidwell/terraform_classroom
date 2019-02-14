@@ -54,10 +54,6 @@ Key-value pairs within the resource block define the configuration of the given
 resource. Required and optional keys are given by the azurerm provider
 specifications.
 
-At Brunswick, these resource blocks will account for the majority of Terraform
-code written. They will be used to define all Azure resources that are buildable
-using the azurerm provider.
-
 ## 1.1.3 Variable Blocks
 
 [Variables](https://www.terraform.io/docs/configuration/variables.html) in Terraform 
@@ -96,12 +92,6 @@ refer to explicit variables, while the ones that start with a resource type and
 ID refer to other existing configuration values within the Terraform deployment.
 Implicit variable references also create dependency links which define the order
 in which resources must be created.
-
-For Brunswick resources, all resource values will be defined as variables and
-declared in a dedicated variables file. Secure variable declarations will exist
-in the master variable file, but associated values will be stored in a
-separately stored values file in secure storage for use during package build.
-
 
 ## 1.1.4 Terraform Commands
 
