@@ -31,6 +31,8 @@ still using a common set of Terraform configuration files.
 
 It is best practice to use a [remote state file](https://www.terraform.io/docs/state/remote.html) when working in a team. If team members each had their own copy of the state file, resource consistency would be lost since everyone would be working outside of a "single source of truth". In this scenario, state files are stored remotely in a storage account per the remote backend configuration given to Terraform. Remote state configuration is defined with a [backend](https://www.terraform.io/docs/backends) in a ```terraform``` block like the following example which would store state in an AWS S3 bucket in the US East 2 region.
 
+It is important to note that **backend blocks do not support interpolation**. Any interpolations used in a backed block will be interpreted as literal strings.
+
 ```
 terraform {
   backend "s3" {
@@ -65,7 +67,7 @@ files.
 
 ```
 provider "azurerm" {
-    version         = "~> 1.19"
+    version         = "~> 1.22"
     subscription_id = "${var.azure_sub_id}"
     client_id       = "${var.azure_client_id}"
     client_secret   = "${var.azure_client_secret}"
