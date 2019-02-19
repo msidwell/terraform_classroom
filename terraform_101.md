@@ -7,7 +7,6 @@
   - [Exercise 1: Creating a Resource](#exercise-1-creating-a-resource)
   - [Exercise 2: Using Variables](#exercise-2-using-variables)
   - [Exercise 3: Organizing with .tf Files](#exercise-3-organizing-with-tf-files)
-  - [Suggested Answers](#suggested-answers)
 
 # Terraform 101
 
@@ -142,7 +141,3 @@ Your resource block should look similar to the resource example in [section 1.1.
 ## Exercise 3: Organizing with .tf Files
 
 Using the file contents from the [second exercise]((#exercise-2-using-variables)), create a second .tf file and move your variable declarations to it. Test and apply your configuration and see that it creates the same resource as your answer form the previous exercise.
-
-## Suggested Answers
-
-You can find suggested file structure and contents in the [suggested answers](/suggested_answers/) folder
