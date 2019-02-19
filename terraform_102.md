@@ -118,12 +118,16 @@ they can all use the same set of standardized modules in their work.
 
 Create a backend configuration file for the deployment you created at the end of terraform_101. This backend can use any service, such as [AWS S3](https://www.terraform.io/docs/backends/types/s3.html), [Azure storage accounts](https://www.terraform.io/docs/backends/types/azurerm.html), or [GCS](https://www.terraform.io/docs/backends/types/gcs.html)
 
-Make sure to use ```terraform -destroy``` on any resources leftover from your previous testing. Since we are creating a net new state file, any existing resources will cause errors when trying to deploy because Terraform won't know that they exist.
+Make sure to use ```terraform -destroy``` on any resources leftover from your previous testing. Since we are creating a net new state file, any existing resources will cause errors when trying to deploy because Terraform won't know that they already exist.
 
 ## Exercise 2: Automating Your Environment with a Service Principle
 
 **NOTE: Always apply any credential data directly through the command line or use a secret management solution whenever possible! Be careful to never commit any credential data to a public repository (or even a private one). [Nefarious individuals](https://digitalguardian.com/blog/deloitte-hack-underscores-risk-credential-leaks) are [always](https://docs.aws.amazon.com/general/latest/gr/aws-access-keys-best-practices.html) crawling [repos](https://www.theregister.co.uk/2015/01/06/dev_blunder_shows_github_crawling_with_keyslurping_bots/) for this data and they [will use it](http://vertis.io/2013/12/16/unauthorised-litecoin-mining.html)!**
 
-Add a ```provider``` block to one of your *.tf files that utilizes a service principle. This requires that you create a service principle account to your cloud provider tenant. Instructions for creating the account and using its credentials can be found on the [backend type page](https://www.terraform.io/docs/backends/types/index.html) published by Hashicorp.
+Add a ```provider``` block to one of your *.tf files that utilizes a service principle. This requires that you create a service principle account to your cloud provider tenant. Instructions for creating the account and using its credentials can be found on the [backend type page](https://www.terraform.io/docs/backends/types/index.html) published by Hashicorp. Adding the service principle should show no needed changes to your resources once it authenticates successfully.
 
 ## Exercise 3: Leveraging Modules to Save on Duplicate Code
+
+Turn your existing Terraform deployment into a module and call it using a parent *.tf file. This should result in creating the exact same resources from the previous two exercises.
+
+Make sure to use ```terraform -destroy``` on any resources leftover from your previous testing. Moving to a module will change the state identifier for your resources which will cause errors when trying to deploy because Terraform won't know that they already exist.
