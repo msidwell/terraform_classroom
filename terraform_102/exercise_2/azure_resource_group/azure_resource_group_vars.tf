@@ -1,17 +1,21 @@
 #Variable declarations
 variable "azure_sub_id" {
-    description   = "Azure subscription ID"
+  type        = "string"
+  description = "Azure subscription ID"
 }
 
 variable "azure_client_id" {
+  type        = "string"
   description = "Azure SP user ID"
 }
 
 variable "azure_client_secret" {
+  type        = "string"
   description = "Azure SP user secret"
 }
 
 variable "azure_tenant_id" {
+  type = "string"
   description = "Azure tenant ID"
 }
 variable "rg_name" {

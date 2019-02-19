@@ -1,9 +1,11 @@
 #Variable declarations
 variable "aws_access_key" {
+  type        = "string"
   description = "AWS access key for principle"
 }
 
 variable "aws_secret_key" {
+  type        = "string"
   description = "AWS principle secret"
 }
 
