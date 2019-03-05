@@ -43,6 +43,50 @@ terraform {
 }
 ```
 
+### 1.2.1.2 Remote State Management
+
+Terraform defines the [state](https://www.terraform.io/docs/commands/state/index.html) command as a concept that is used for advanced state management. Typically, something about your environment configuration must be out of lineage if you’re planning on using these CLI commands. This isn’t something that is ideal or normally performed as a regular routine, and it isn’t recommended to directly edit the state file as that will only cause more issues with lineage.
+
+Instead, Terraform does the heavy lifting for you that will assess whether a push, move, or any other request can be done and will carefully do so. In fact, it intentionally creates a backup state file so a simple mistake could be reversible by re-uploading the previous state file. It is important to note that this situation applies to both local state files as well as a remote state file in a backend configuration.
+
+Here’s the usage syntax, if you aren’t familiar already:
+
+`terraform state \<subcommand\> [options] [args]`
+
+Let’s start out by showing what we currently have in the state file via the CLI. Run the following command:
+
+`terraform state list`
+
+*Output*:
+
+![](_img/6c24fc414f42ec90577dc59909033a26.png)
+
+Notice that the resources do not have a module specified at the beginning of their configuration name. Now, let’s see if we can move from our current state to our future state, which is essentially moving all networking components into a new module named “networking”. Run the following command:
+
+`terraform state mv azurerm_subnet.appgate_sn module.networking`
+
+*Output*:
+
+![](_img/bbdf852e502e7fa9eb822e6079863614.png)
+
+Now, let’s repeat this process for the other virtual networks along with the peerings and check against our updated configuration in the main.tf file. Here’s the output:
+
+![](_img/5c776d5b13fb389249f3f6e4e6af90e7.png)
+
+Here’s what the *updated* state list looks like now:
+
+![](_img/461c8dba5c04daea0d61d287a15f9812.png)
+
+Now, let’s see what we get when we run a plan. Terraform should expect 0 changes needed and should be happy. Run a plan command and target a specific variable file if you aren’t loading variables automatically (e.g.: `terraform plan -var-file=".\variable_inputs\non_production.tfvars"`). Here’s the output:
+
+![](_img/b96c6226d4f9116c2c58e3724d52e62b.png)
+
+Perfect! Let’s make sure this is the case by applying the updated local configuration and ensure that state is updated (e.g.: `terraform apply -var-file=”.\variable_inputs\non_production.tfvars”`). Here’s the output:
+
+![](_img/0db0cb2ebd52e2ad115c0a87cdf8c3e9.png)
+
+There you have it – a state file that has been updated with resources in a new module.
+
 ## 1.2.2 Provider Blocks
 
 Terraform connects to a myriad of infrastructure solutions using intermediate
