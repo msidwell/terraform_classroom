@@ -1,6 +1,7 @@
 - [Terraform 102](#terraform-102)
   - [1.2.1 Terraform State](#121-terraform-state)
     - [1.2.1.1 Remote State Files](#1211-remote-state-files)
+    - [1.2.1.2 Remote State Management](#1212-remote-state-management)
   - [1.2.2 Provider Blocks](#122-provider-blocks)
   - [1.2.3 Modules](#123-modules)
 - [Labs](#labs)
