@@ -29,18 +29,14 @@ resource "azurerm_subnet" "subnet001" {
     address_prefix       = "10.0.0.0/27"
 }
 ```
+
 The two strings after **resource** are the resource type and resource ID respectively. Resource type is a reference to the Azure resource type for the **provider** block which will be covered in a later section. The resource ID is a user-defined tag for the resource which can be referred to using Terraform **variables**. The combination of type and ID must be unique within a given Terraform deployment.
 
 Key-value pairs within the resource block define the configuration of the given resource. Required and optional keys are given by the azurerm provider specifications.
 
 ## 1.1.3 Variable Blocks
 
-[Variables](https://www.terraform.io/docs/configuration/variables.html) in Terraform 
-are declared using variable blocks like the example below. They have type, description, 
-and default parameters. The type parameter defines the variable as a string, list, or map. 
-Descriptions simply act as a comment which gives context to a variable.  The default 
-parameter defines the default value of the variable in the event that it is not 
-explicitly set.
+[Variables](https://www.terraform.io/docs/configuration/variables.html) in Terraform are declared using variable blocks like the example below. They have type, description, and default parameters. The type parameter defines the variable as a string, list, or map. Descriptions simply act as a comment which gives context to a variable.  The default parameter defines the default value of the variable in the event that it is not explicitly set.
 
 ```
 variable "dataDiskCaching" {
@@ -50,12 +46,7 @@ variable "dataDiskCaching" {
 }
 ```
 
-Variables can be referenced in multiple ways. They can be explicitly defined
-within a variables file using **variable** blocks, environment variables, of
-runtime command line inputs. In addition, they can be implicitly defined using
-references to resource blocks by using their type and ID. The previous example
-**resource** block has been copied below with a few modifications to showcase
-the utility of variables in Terraform.
+Variables can be referenced in multiple ways. They can be explicitly defined within a variables file using **variable** blocks, environment variables, of runtime command line inputs. In addition, they can be implicitly defined using references to resource blocks by using their type and ID. The previous example **resource** block has been copied below with a few modifications to showcase the utility of variables in Terraform.
 
 ```
 resource "azurerm_subnet" "subnet" {
@@ -66,11 +57,7 @@ resource "azurerm_subnet" "subnet" {
 }
 ```
 
-Variables are called by using “${}” sets. The entries which start with “var.\*”
-refer to explicit variables, while the ones that start with a resource type and
-ID refer to other existing configuration values within the Terraform deployment.
-Implicit variable references also create dependency links which define the order
-in which resources must be created.
+Variables are called by using “${}” sets. The entries which start with “var.\*” refer to explicit variables, while the ones that start with a resource type and ID refer to other existing configuration values within the Terraform deployment. Implicit variable references also create dependency links which define the order in which resources must be created.
 
 ## 1.1.4 Terraform Commands
 
