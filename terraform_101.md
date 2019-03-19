@@ -3,6 +3,7 @@
   - [1.1.2 Resource Blocks](#112-resource-blocks)
   - [1.1.3 Variable Blocks](#113-variable-blocks)
   - [1.1.4 Terraform Commands](#114-terraform-commands)
+  - [1.1.5 Creating Terraform Files](#115-creating-terraform-files)
 - [Labs](#labs)
   - [Exercise 1: Creating a Resource](#exercise-1-creating-a-resource)
   - [Exercise 2: Using Variables](#exercise-2-using-variables)
@@ -118,6 +119,10 @@ Terraform [apply](https://www.terraform.io/docs/commands/apply.html) performs th
 environment. By default, it requires user input to confirm a deployment but the
 “-autoapprove” flag skips this step. As mentioned above, it will run a plan step
 on its own or can be fed a plan file with an expected run set.
+
+## 1.1.5 Creating Terraform Files
+
+File structures in a Terraform deployments are quite flexible, though there are a few organizational tricks to keep in mind. There are three file extension patterns to be aware of, namely ```*.tf```, ```*.tfvars```, and ```*.auto.tfvars``` which each have unique usages. ```*.tf``` files contain any sort of HCL block and are automatically loaded by Terraform if they are in the working directory. ```*.tfvars``` files contain key=value pairs which set variable values for variables declared in ```*.tf``` files but must be intentionally loaded at runtime by using the ```--var-file``` parameter. Alternatively, ```*.auto.tfvars``` files are the same as the previous ```*.tfvars``` files except they will automatically be loaded into memory by Terraform if they are in the working directory. In most deployments, it is sufficient to use one ```*.tf``` file for resource blocks, another for variable blocks, and a final ```*.tfvars``` file for inputting variable values.
 
 # Labs
 
