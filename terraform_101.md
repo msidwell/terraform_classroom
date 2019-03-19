@@ -61,30 +61,13 @@ Variables are called by using “${}” sets. The entries which start with “va
 
 ## 1.1.4 Terraform Commands
 
-The Terraform CLI has a compact set of commands for managing deployments. The
-general flow of a Terraform deployment consists of init, plan, and apply steps.
-There are other more advanced commands, but those are for specific circumstances
-which fall outside the scope of this document.
+The Terraform CLI has a compact set of commands for managing deployments. The general flow of a Terraform deployment consists of init, plan, and apply steps. There are other more advanced commands, but those are for specific circumstances which fall outside the scope of this document.
 
-Terraform [init](https://www.terraform.io/docs/commands/init.html) initializes a
-Terraform deployment directory with the required data and provider
-specifications for running further Terraform commands. In addition, it will
-configure a remote backend if the required credentials and addresses are
-present. This command is always safe to run as it does not touch resources.
+Terraform [init](https://www.terraform.io/docs/commands/init.html) initializes a Terraform deployment directory with the required data and provider specifications for running further Terraform commands. In addition, it will configure a remote backend if the required credentials and addresses are present. This command is always safe to run as it does not touch resources.
 
-Terraform [plan](https://www.terraform.io/docs/commands/plan.html) performs a state refresh and compares configuration files to the
-current state of resources in a way similar to a [Puppet ```--noop``` run](https://docs.puppet.com/puppet/3.6/man/agent.html#OPTIONS). If a delta is discovered, Terraform will mark that
-resource as requiring modification, destruction, or recreation. It then outputs
-a full intended configuration set as well as a simplified counter of resources
-that will be changed, destroyed, or left untouched. This command can be used to
-output a Terraform plan file which is used during the apply step to perform the
-exact changes specified by plan. Otherwise, apply will get a plan on its own
-when it is run without a specified plan file.
+Terraform [plan](https://www.terraform.io/docs/commands/plan.html) performs a state refresh and compares configuration files to the current state of resources in a way similar to a [Puppet ```--noop``` run](https://docs.puppet.com/puppet/3.6/man/agent.html#OPTIONS). If a delta is discovered, Terraform will mark that resource as requiring modification, destruction, or recreation. It then outputs a full intended configuration set as well as a simplified counter of resources that will be changed, destroyed, or left untouched. This command can be used to output a Terraform plan file which is used during the apply step to perform the exact changes specified by plan. Otherwise, apply will get a plan on its own when it is run without a specified plan file.
 
-Terraform [apply](https://www.terraform.io/docs/commands/apply.html) performs the actual deployment of resources into a given
-environment. By default, it requires user input to confirm a deployment but the
-“-autoapprove” flag skips this step. As mentioned above, it will run a plan step
-on its own or can be fed a plan file with an expected run set.
+Terraform [apply](https://www.terraform.io/docs/commands/apply.html) performs the actual deployment of resources into a given environment. By default, it requires user input to confirm a deployment but the “-autoapprove” flag skips this step. As mentioned above, it will run a plan step on its own or can be fed a plan file with an expected run set.
 
 ## 1.1.5 Creating Terraform Files
 
