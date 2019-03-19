@@ -19,10 +19,7 @@ Terraform code is written in [Hashicorp Configuration Language](https://github.c
 
 ## 1.1.2 Resource Blocks
 
-[Resource blocks](https://www.terraform.io/docs/configuration/resources.html)
-within Terraform files consist of a **resource** declaration with all associated
-configuration data contained within. The following example shows a resource
-block which defines a subnet in Azure.
+[Resource blocks](https://www.terraform.io/docs/configuration/resources.html) within Terraform files consist of a **resource** declaration with all associated configuration data contained within. The following example shows a resource block which defines a subnet in Azure.
 
 ```
 resource "azurerm_subnet" "subnet001" {
@@ -32,16 +29,9 @@ resource "azurerm_subnet" "subnet001" {
     address_prefix       = "10.0.0.0/27"
 }
 ```
-The two strings after **resource** are the resource type and resource ID
-respectively. Resource type is a reference to the Azure resource type for the
-**provider** block which will be covered in a later section. The resource ID is
-a user-defined tag for the resource which can be referred to using Terraform
-**variables**. The combination of type and ID must be unique within a given
-Terraform deployment.
+The two strings after **resource** are the resource type and resource ID respectively. Resource type is a reference to the Azure resource type for the **provider** block which will be covered in a later section. The resource ID is a user-defined tag for the resource which can be referred to using Terraform **variables**. The combination of type and ID must be unique within a given Terraform deployment.
 
-Key-value pairs within the resource block define the configuration of the given
-resource. Required and optional keys are given by the azurerm provider
-specifications.
+Key-value pairs within the resource block define the configuration of the given resource. Required and optional keys are given by the azurerm provider specifications.
 
 ## 1.1.3 Variable Blocks
 
