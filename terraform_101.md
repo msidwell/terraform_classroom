@@ -13,20 +13,9 @@
 
 ## 1.1.1 Basics
 
-Terraform is an open source Infrastructure-as-Code (IaC) solution for
-idempotent multi-cloud infrastructure management. Infrastructure components are
-defined as declarative code in the form of resource blocks which are stored
-within Terraform configuration files. Resource blocks define all aspects of a
-given resource within the bounds of the Terraform provider which
-handles communication of Terraform code to the resource provider API.
+Terraform is an open source Infrastructure-as-Code (IaC) solution for idempotent multi-cloud infrastructure management. Infrastructure components are defined as declarative code in the form of resource blocks which are stored within Terraform configuration files. Resource blocks define all aspects of a given resource within the bounds of the Terraform provider which handles communication of Terraform code to the resource provider API.
 
-Terraform code is written in [Hashicorp Configuration Language](https://github.com/hashicorp/hcl) (HCL). 
-This language follows a block-based structure allowing for simple constrcution and readability. 
-The declarative syntax of Terraform allows for a wide range of choices when it comes to organization. 
-Any and all \*.tf files within the working directory willbe loaded by Terraform when it is called. 
-For this reason, it is trivial to break up a set of configuration files into directories with separate variable
-files. File structure and file distribution can change depending on the
-complexity and needs of a given deployment.
+Terraform code is written in [Hashicorp Configuration Language](https://github.com/hashicorp/hcl) (HCL). This language follows a block-based structure allowing for simple constrcution and readability. The declarative syntax of Terraform allows for a wide range of choices when it comes to organization. Any and all \*.tf files within the working directory willbe loaded by Terraform when it is called. For this reason, it is trivial to break up a set of configuration files into directories with separate variable files. File structure and file distribution can change depending on the complexity and needs of a given deployment.
 
 ## 1.1.2 Resource Blocks
 
