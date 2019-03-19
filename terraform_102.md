@@ -13,19 +13,9 @@
 
 ## 1.2.1 Terraform State
 
-Known resource states are stored as JSON data in a [state
-file](https://www.terraform.io/docs/state/) which Terraform references when
-running a plan or apply step to decide whether any resources will be created,
-changed, or destroyed. When running Terraform locally, a state file is
-automatically created when a plan or apply command is given to Terraform.
+Known resource states are stored as JSON data in a [state file](https://www.terraform.io/docs/state/) which Terraform references when running a plan or apply step to decide whether any resources will be created, changed, or destroyed. When running Terraform locally, a state file is automatically created when a plan or apply command is given to Terraform.
 
-At plan/apply time, Terraform compares the current state of resources with their
-expected state in the state file. If a resource deviates from expected state, it
-will be recreated during an apply step. Also, if a configuration step fails
-during apply then the resource will be marked as tainted for further
-remediation. [Workspaces](https://www.terraform.io/docs/state/workspaces.html)
-are used to separate code level environment state files from one another while
-still using a common set of Terraform configuration files.
+At plan/apply time, Terraform compares the current state of resources with their expected state in the state file. If a resource deviates from expected state, it will be recreated during an apply step. Also, if a configuration step fails during apply then the resource will be marked as tainted for further remediation. [Workspaces](https://www.terraform.io/docs/state/workspaces.html) are used to separate code level environment state files from one another while still using a common set of Terraform configuration files.
 
 
 ### 1.2.1.1 Remote State Files
