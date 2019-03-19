@@ -98,18 +98,7 @@ provider "azurerm" {
 
 ## 1.2.3 Modules
 
-
-Terraform [modules](https://www.terraform.io/docs/modules/index.html) simply
-consist of Terraform code that is used as a repeatable group. Any valid
-Terraform deployment code can be used as a module. What makes a given set of
-Terraform code a module is that it gets called by the root module by using a
-[module block](https://www.terraform.io/docs/modules/usage.html). The only
-required input for module blocks is the
-[source](https://www.terraform.io/docs/modules/sources.html) of the module.
-Modules can be sourced from a variety of locations including local files and
-GitHub. For example, a local module could be called by the following module
-block where the source input is set to a local directory called
-“terraform_naming_module”.
+Terraform [modules](https://www.terraform.io/docs/modules/index.html) simply consist of Terraform code that is used as a repeatable group. Any valid Terraform deployment code can be used as a module. What makes a given set of Terraform code a module is that it gets called by the root module by using a [module block](https://www.terraform.io/docs/modules/usage.html). The only required input for module blocks is the [source](https://www.terraform.io/docs/modules/sources.html) of the module. Modules can be sourced from a variety of locations including local files and GitHub. For example, a local module could be called by the following module block where the source input is set to a local directory called “terraform_naming_module”.
 
 ```
 module "sccm_sn" {
@@ -123,15 +112,7 @@ module "sccm_sn" {
 }
 ```
 
-This block calls a module and passes variables into the module to
-use during processing. In addition, modules can use output blocks to pass
-resource information and calculated values back to the parent module after
-processing. Between module inputs and outputs, their value in repeatability
-becomes clear. A single module can be used many times to create similar
-resources with slightly different names, sizes, shapes, etc. without reinventing
-the wheel every time. Not only does this save time and effort, but can help
-maintain consistency between infrastructure admins within an organization since
-they can all use the same set of standardized modules in their work.
+This block calls a module and passes variables into the module to use during processing. In addition, modules can use output blocks to pass resource information and calculated values back to the parent module after processing. Between module inputs and outputs, their value in repeatability becomes clear. A single module can be used many times to create similar resources with slightly different names, sizes, shapes, etc. without reinventing the wheel every time. Not only does this save time and effort, but can help maintain consistency between infrastructure admins within an organization since they can all use the same set of standardized modules in their work.
 
 # Labs
 
