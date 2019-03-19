@@ -80,25 +80,11 @@ There you have it – a state file that has been updated with resources in a new
 
 ## 1.2.2 Provider Blocks
 
-Terraform connects to a myriad of infrastructure solutions using intermediate
-API translators called [providers](https://www.terraform.io/docs/providers/). For instance, the
-[azurerm](https://www.terraform.io/docs/providers/azurerm/index.html) provider can be used to spin 
-up resources in Microsoft Azure.
+Terraform connects to a myriad of infrastructure solutions using intermediate API translators called [providers](https://www.terraform.io/docs/providers/). For instance, the [azurerm](https://www.terraform.io/docs/providers/azurerm/index.html) provider can be used to spin up resources in Microsoft Azure.
 
-A **provider** block contains all the information needed to initialize a
-connection with the infrastructure solution in question. For instance, an
-azurerm **provider** block contains the service principal credentials for
-accessing a given Azure subscription. In addition to credentials, a version
-specification can be added to prevent unwanted provider version upgrades at
-build time.
+A **provider** block contains all the information needed to initialize a connection with the infrastructure solution in question. For instance, an azurerm **provider** block contains the service principal credentials for accessing a given Azure subscription. In addition to credentials, a version specification can be added to prevent unwanted provider version upgrades at build time.
 
-The azurerm provider requires contributor access to an Azure subscription in
-order to make changes in that environment. Credentials for said service
-principal can be created from the [Azure CLI or the Azure
-portal](https://www.terraform.io/docs/providers/azurerm/authenticating_via_service_principal.html).
-Once created, the credentials can be entered in a local shell through az login
-or as defined values for automated deployments within Terraform configuration
-files.
+The azurerm provider requires contributor access to an Azure subscription in order to make changes in that environment. Credentials for said service principal can be created from the [Azure CLI or the Azure portal](https://www.terraform.io/docs/providers/azurerm/authenticating_via_service_principal.html). Once created, the credentials can be entered in a local shell through az login or as defined values for automated deployments within Terraform configuration files.
 
 ```
 provider "azurerm" {
