@@ -17,13 +17,12 @@ variable "rg_env" {
   default     = "eastus2"
 }
 
-
 #Resource declarations
 resource "azurerm_resource_group" "rg01" {
-  name     = "${var.rg_name}"
-  location = "${var.rg_location}"
+  name     = var.rg_name
+  location = var.rg_location
 
   tags     = {
-      env  = "${var.rg_env}"
+      env  = var.rg_env
   }
 }

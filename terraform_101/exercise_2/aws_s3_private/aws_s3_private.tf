@@ -19,10 +19,10 @@ variable "bucket_type_tag" {
 
 #Resource declarations
 resource "aws_s3_bucket" "bucket01" {
-  bucket = "${var.bucket_name}"
-  region = "${var.bucket_region}"
+  bucket = var.bucket_name
+  region = var.bucket_region
 
   tags   = {
-    type = "${var.bucket_type_tag}"
+    type = var.bucket_type_tag
   }
 }
