@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
     bucket = "my-fresh-bucket"
-    key    = "secret/path/to/my/secret/key"
+    key    = "path/to/my/statefile.tfstate"
     region = "us-east-2"
   }
 }
