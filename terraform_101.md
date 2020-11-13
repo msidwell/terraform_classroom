@@ -97,7 +97,7 @@ Create a resource block for your preferred resource provider. Good starting reso
 
 Test the structure of your .tf file by running ```terraform init``` or ```terraform validate```. Make sure you try actually deploying the resource by using your preferred CLI to login to the resource provider and running ```terraform apply```. For instance, log into the [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html) using ```aws configure``` or log into the [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/reference-index?view=azure-cli-latest#az-login) using ```az login```
 
-Your answer should look similar to the example provided in [section 1.1.2](#12-resource-blocks)
+Your answer should look similar to the example provided in [section 1.1.2](#112-resource-blocks)
 
 ## Exercise 2: Using Variables
 
@@ -106,7 +106,7 @@ into variable references. This requires that you declare a variable block for ea
 
 As before, make sure to test your configuration using a combination of ```terraform init```, ```terraform validate```, and ```terraform apply```. You will be asked to input values for your variables at plan/apply time.
 
-Your resource block should look similar to the resource example in [section 1.1.3](#13-variable-blocks), and it should be accompanied by a number of variable blocks which look like the example declaration in that same section.
+Your resource block should look similar to the resource example in [section 1.1.4](#114-variable-blocks), and it should be accompanied by a number of variable blocks which look like the example declaration in that same section.
 
 ## Exercise 3: Organizing Projects with .tf Files
 
