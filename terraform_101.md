@@ -20,7 +20,7 @@ Terraform code is written in [Hashicorp Configuration Language](https://github.c
 
 ## 1.1.2 Resource Blocks
 
-[Resource blocks](https://www.terraform.io/docs/configuration/resources.html) within Terraform files consist of a **resource** declaration with all associated configuration data contained within. The following example shows a resource block which defines a subnet in Azure.
+[Resource blocks](https://www.terraform.io/docs/configuration/resources.html) within Terraform files consist of a ```resource``` declaration with all associated configuration data contained within. The following example shows a resource block which defines a subnet in Azure.
 
 ```
 resource "azurerm_subnet" "subnet001" {
@@ -31,13 +31,13 @@ resource "azurerm_subnet" "subnet001" {
 }
 ```
 
-The two strings after **resource** are the resource type and resource ID respectively. Resource type is a reference to the Azure resource type for the **provider** block which will be covered in a later section. The resource ID is a user-defined tag for the resource which can be referred to using Terraform **variables**. The combination of type and ID must be unique within a given Terraform deployment.
+The two strings after ```resource``` are the resource type and resource ID respectively. Resource type is a reference to the Azure resource type for the ```provider``` block which will be covered in a later section. The resource ID is a user-defined tag for the resource which can be referred to using Terraform [dependencies](#113-implicit-dependencies). The combination of type and ID must be unique within a given Terraform deployment.
 
 Key-value pairs within the resource block define the configuration of the given resource. Required and optional keys are given by the azurerm provider specifications.
 
 ## 1.1.3 Implicit Dependencies
 
-A key feature of HCL is the ability to implicitly create a dependency graph by [referencing attributes of different resource blocks](https://www.terraform.io/docs/configuration/expressions.html#references-to-resource-attributes) when resources depend on a previous object to successfully provision. It is best practice to use these references wherever possible rather than hardcoding values in order to make configurations more flexible and race condition resistant. These references are defined using paths to remote resource block attributes by using their type, ID, and attribute name. The previous example **resource** block has been recreated below with a few modifications to showcase the syntax of implicit references in Terraform.
+A key feature of HCL is the ability to implicitly create a dependency graph by [referencing attributes of different resource blocks](https://www.terraform.io/docs/configuration/expressions.html#references-to-resource-attributes) when resources depend on a previous object to successfully provision. It is best practice to use these references wherever possible rather than hardcoding values in order to make configurations more flexible and race condition resistant. These references are defined using paths to remote resource block attributes by using their type, ID, and attribute name. The previous example ```resource``` block has been recreated below with a few modifications to showcase the syntax of implicit references in Terraform.
 
 ```
 resource "azurerm_subnet" "subnet" {
@@ -52,7 +52,7 @@ Now that the parent virtual network and resource group are implicitly referenced
 
 ## 1.1.4 Variable Blocks
 
-[Variables](https://www.terraform.io/docs/configuration/variables.html) in Terraform are declared using variable blocks like the example below. They have type, description, and default parameters. The type parameter defines the variable as a string, list, or map. Descriptions simply act as a comment which gives context to a variable.  The default parameter defines the default value of the variable in the event that it is not explicitly set.
+[Variables](https://www.terraform.io/docs/configuration/variables.html) in Terraform are declared using ```variable``` blocks like the example below. They have type, description, and default parameters. The type parameter defines the variable as a string, list, or map. Descriptions simply act as a comment which gives context to a variable. The default parameter defines the default value of the variable in the event that it is not explicitly set.
 
 ```
 variable "dataDiskCaching" {
@@ -62,7 +62,7 @@ variable "dataDiskCaching" {
 }
 ```
 
-Variables are explicitly defined within a variables file using **variable** blocks, with inputs provided by input calue files, environment variables, or runtime command line inputs. The previous example **resource** block has been updated with variable entries to remove all hardcoded values, making it highly modular and flexible for future changes.
+Variables are explicitly defined within a variables file using ```variable``` blocks, with inputs provided by input calue files, environment variables, or runtime command line inputs. The previous example ```resource``` block has been updated with variable entries to remove all hardcoded values, making it highly modular and flexible for future changes.
 
 ```
 resource "azurerm_subnet" "subnet" {
@@ -79,11 +79,11 @@ Variable references start with “var.\*” followed by the desired variable ID.
 
 The Terraform CLI has a compact set of commands for managing deployments. The general flow of a Terraform deployment consists of init, plan, and apply steps. There are other more advanced commands, but those are for specific circumstances which fall outside the scope of this document.
 
-Terraform [init](https://www.terraform.io/docs/commands/init.html) initializes a Terraform deployment directory with the required data and provider specifications for running further Terraform commands. In addition, it will configure a remote backend if the required credentials and addresses are present. This command is always safe to run as it does not touch resources.
+Terraform [```init```](https://www.terraform.io/docs/commands/init.html) initializes a Terraform deployment directory with the required data and provider specifications for running further Terraform commands. In addition, it will configure a remote backend if the required credentials and addresses are present. This command is always safe to run as it does not touch resources.
 
-Terraform [plan](https://www.terraform.io/docs/commands/plan.html) performs a state refresh and compares configuration files to the current state of resources in a way similar to a [Puppet ```--noop``` run](https://docs.puppet.com/puppet/3.6/man/agent.html#OPTIONS). If a delta is discovered, Terraform will mark that resource as requiring modification, destruction, or recreation. It then outputs a full intended configuration set as well as a simplified counter of resources that will be changed, destroyed, or left untouched. This command can be used to output a Terraform plan file which is used during the apply step to perform the exact changes specified by plan. Otherwise, apply will get a plan on its own when it is run without a specified plan file.
+Terraform [```plan```](https://www.terraform.io/docs/commands/plan.html) performs a state refresh and compares configuration files to the current state of resources in a way similar to a [Puppet ```--noop``` run](https://docs.puppet.com/puppet/3.6/man/agent.html#OPTIONS). If a delta is discovered, Terraform will mark that resource as requiring modification, destruction, or recreation. It then outputs a full intended configuration set as well as a simplified counter of resources that will be changed, destroyed, or left untouched. This command can be used to output a Terraform plan file which is used during the apply step to perform the exact changes specified by plan. Otherwise, apply will get a plan on its own when it is run without a specified plan file.
 
-Terraform [apply](https://www.terraform.io/docs/commands/apply.html) performs the actual deployment of resources into a given environment. By default, it requires user input to confirm a deployment but the “-autoapprove” flag skips this step. As mentioned above, it will run a plan step on its own or can be fed a plan file with an expected run set.
+Terraform [```apply```](https://www.terraform.io/docs/commands/apply.html) performs the actual deployment of resources into a given environment. By default, it requires user input to confirm a deployment but the “-autoapprove” flag skips this step. As mentioned above, it will run a plan step on its own or can be fed a plan file with an expected run set.
 
 ## 1.1.6 Creating Terraform Files
 
