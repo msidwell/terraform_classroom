@@ -15,20 +15,18 @@
 
 Known resource states are stored as JSON data in a [state file](https://www.terraform.io/docs/state/) which Terraform references when running a plan or apply step to decide whether any resources will be created, changed, or destroyed. When running Terraform locally, a state file is automatically created when a plan or apply command is given to Terraform.
 
-At plan/apply time, Terraform compares the current state of resources with their expected state in the state file. If a resource deviates from expected state, it will be recreated during an apply step. Also, if a configuration step fails during apply then the resource will be marked as tainted for further remediation. [Workspaces](https://www.terraform.io/docs/state/workspaces.html) are used to separate code level environment state files from one another while still using a common set of Terraform configuration files.
+At plan/apply time, Terraform compares the current state of resources with their expected state in the state file. If a resource deviates from expected state, it will be modified or recreated during an apply step. Also, if a configuration step fails during apply then the resource will be marked as tainted for further remediation. [Workspaces](https://www.terraform.io/docs/state/workspaces.html) are used to separate code level environment state files from one another while still using a common set of Terraform configuration files.
 
 
 ### 1.2.1.1 Remote State Files
 
-It is best practice to use a [remote state file](https://www.terraform.io/docs/state/remote.html) when working in a team. If team members each had their own copy of the state file, resource consistency would be lost since everyone would be working outside of a "single source of truth". In this scenario, state files are stored remotely in a storage account per the remote backend configuration given to Terraform. Remote state configuration is defined with a [backend](https://www.terraform.io/docs/backends) in a ```terraform``` block like the following example which would store state in an AWS S3 bucket in the US East 2 region.
-
-It is important to note that **backend blocks do not support interpolation**. Any interpolations used in a backed block will be interpreted as literal strings.
+It is best practice to use a [remote state file](https://www.terraform.io/docs/state/remote.html) when working in a team. If team members each had their own copy of a given state file, resource consistency would be lost since everyone would be working outside of a "single source of truth". With remote backends, state files are stored remotely in a storage location per the remote backend configuration given to Terraform. Remote state configuration is defined with a [```backend```](https://www.terraform.io/docs/backends) block inside of a ```terraform``` block like the following example which would store state in an AWS S3 bucket in the US East 2 region. It is important to note that **backend blocks do not support interpolation**. Any interpolations used in a backend block will be interpreted as literal strings.
 
 ```
 terraform {
   backend "s3" {
     bucket = "my-fresh-bucket"
-    key    = "secret/path/to/my/secret/key"
+    key    = "path/to/my/statefile.tfstate"
     region = "us-east-2"
   }
 }
@@ -36,11 +34,9 @@ terraform {
 
 ### 1.2.1.2 Remote State Management
 
-Terraform defines the [state](https://www.terraform.io/docs/commands/state/index.html) command as a concept that is used for advanced state management. Typically, something about your environment configuration must be out of lineage if you’re planning on using these CLI commands. This isn’t something that is ideal or normally performed as a regular routine, and it isn’t recommended to directly edit the state file as that will only cause more issues with lineage.
+The Terraform [```state```](https://www.terraform.io/docs/commands/state/index.html) command is a tool used for advanced state management. This command is typically reserved for use during complex CI workflows or if something has gone wrong during  a deployment and requires in-epth troubleshooting. As such, it isn’t something that is ideal or normally performed as part of a day-to-day workflow, and directly editing the state file outside of the ```state``` command is **highly discouraged** as it can easily corrupt a state file beyond repair.
 
-Instead, Terraform does the heavy lifting for you that will assess whether a push, move, or any other request can be done and will carefully do so. In fact, it intentionally creates a backup state file so a simple mistake could be reversible by re-uploading the previous state file. It is important to note that this situation applies to both local state files as well as a remote state file in a backend configuration.
-
-Here’s the usage syntax, if you aren’t familiar already:
+Instead of manual JSON editing, Terraform ```state``` does the heavy lifting for you that will assess whether a push, move, or any other request can be done and will carefully do so. In fact, it intentionally creates a backup state file so a simple mistake could be reversible by re-uploading the previous state file. It is important to note that this situation applies to both local state files as well as a remote state file in a backend configuration. 
 
 `terraform state \<subcommand\> [options] [args]`
 
@@ -72,7 +68,7 @@ Now, let’s see what we get when we run a plan. Terraform should expect 0 chang
 
 ![](_img/b96c6226d4f9116c2c58e3724d52e62b.png)
 
-Perfect! Let’s make sure this is the case by applying the updated local configuration and ensure that state is updated (e.g.: `terraform apply -var-file=”.\variable_inputs\non_production.tfvars”`). Here’s the output:
+Perfect! Let’s make sure this is the case by applying the updated local configuration and ensure that state is updated (e.g.: ```terraform apply -var-file=".\variable_inputs\non_production.tfvars"```). Here’s the output:
 
 ![](_img/0db0cb2ebd52e2ad115c0a87cdf8c3e9.png)
 
@@ -80,11 +76,11 @@ There you have it – a state file that has been updated with resources in a new
 
 ## 1.2.2 Provider Blocks
 
-Terraform connects to a myriad of infrastructure solutions using intermediate API translators called [providers](https://www.terraform.io/docs/providers/). For instance, the [azurerm](https://www.terraform.io/docs/providers/azurerm/index.html) provider can be used to spin up resources in Microsoft Azure.
+Terraform connects to a myriad of infrastructure providers using intermediate API translators called [providers](https://www.terraform.io/docs/providers/). For instance, the [azurerm](https://www.terraform.io/docs/providers/azurerm/index.html) provider can be used to spin up resources in Microsoft Azure.
 
-A **provider** block contains all the information needed to initialize a connection with the infrastructure solution in question. For instance, an azurerm **provider** block contains the service principal credentials for accessing a given Azure subscription. In addition to credentials, a version specification can be added to prevent unwanted provider version upgrades at build time.
+A ```provider``` block contains all the information needed to initialize a connection with the infrastructure solution in question. For instance, an azurerm ```provider``` block contains the service principal credentials for accessing a given Azure subscription. In addition to credentials, a version specification can be added to prevent unwanted provider version upgrades at build time.
 
-The azurerm provider requires contributor access to an Azure subscription in order to make changes in that environment. Credentials for said service principal can be created from the [Azure CLI or the Azure portal](https://www.terraform.io/docs/providers/azurerm/authenticating_via_service_principal.html). Once created, the credentials can be entered in a local shell through az login or as defined values for automated deployments within Terraform configuration files.
+The azurerm provider requires write access to an Azure subscription in order to make changes in that environment. Credentials for said service principal can be created from the [Azure CLI or the Azure portal](https://www.terraform.io/docs/providers/azurerm/authenticating_via_service_principal.html). Once created, the credentials can be entered in a local shell through ```az login``` or as defined values for automated deployments within Terraform configuration files.
 
 ```
 provider "azurerm" {
@@ -98,7 +94,7 @@ provider "azurerm" {
 
 ## 1.2.3 Modules
 
-Terraform [modules](https://www.terraform.io/docs/modules/index.html) simply consist of Terraform code that is used as a repeatable group. Any valid Terraform deployment code can be used as a module. What makes a given set of Terraform code a module is that it gets called by the root module by using a [module block](https://www.terraform.io/docs/modules/usage.html). The only required input for module blocks is the [source](https://www.terraform.io/docs/modules/sources.html) of the module. Modules can be sourced from a variety of locations including local files and GitHub. For example, a local module could be called by the following module block where the source input is set to a local directory called “terraform_naming_module”.
+Terraform [modules](https://www.terraform.io/docs/modules/index.html) consist of Terraform code designed for use as repeatable groups of resources. Any valid Terraform deployment code can be used as a module, though what makes a given set of Terraform code a module is that it gets called by the root module by using a [```module``` block](https://www.terraform.io/docs/modules/usage.html). The only required input for module blocks is the [source](https://www.terraform.io/docs/modules/sources.html) of the module, though it is highly encouraged to parameterize all inputs for a module using variables. Modules can be sourced from a variety of locations including local files and GitHub. For example, a local module could be called by the following module block where the source input is set to a local directory called “terraform_naming_module”.
 
 ```
 module "sccm_sn" {
@@ -112,7 +108,7 @@ module "sccm_sn" {
 }
 ```
 
-This block calls a module and passes variables into the module to use during processing. In addition, modules can use output blocks to pass resource information and calculated values back to the parent module after processing. Between module inputs and outputs, their value in repeatability becomes clear. A single module can be used many times to create similar resources with slightly different names, sizes, shapes, etc. without reinventing the wheel every time. Not only does this save time and effort, but can help maintain consistency between infrastructure admins within an organization since they can all use the same set of standardized modules in their work.
+This block calls a module and passes variables into it to use during processing. In addition, modules can use output blocks to pass resource information and calculated values back to the parent module after processing. Between module inputs and outputs, their value in repeatability becomes clear, as a single module can be used many times to create similar resources with slightly different names, sizes, shapes, etc. without reinventing the wheel every time. Not only does this save time and effort, but can help maintain consistency between infrastructure deployments within an organization since contributors can all use the same set of standardized modules in their work.
 
 # Labs
 
@@ -124,7 +120,7 @@ Make sure to use ```terraform -destroy``` on any resources leftover from your pr
 
 ## Exercise 2: Automating Your Environment with a Service Principle
 
-**NOTE: Always apply any credential data directly through the command line or use a secret management solution whenever possible! Be careful to never commit any credential data to a public repository (or even a private one). [Nefarious individuals](https://digitalguardian.com/blog/deloitte-hack-underscores-risk-credential-leaks) are [always](https://docs.aws.amazon.com/general/latest/gr/aws-access-keys-best-practices.html) crawling [repos](https://www.theregister.co.uk/2015/01/06/dev_blunder_shows_github_crawling_with_keyslurping_bots/) for this data and they [will use it](http://vertis.io/2013/12/16/unauthorised-litecoin-mining.html)!**
+**NOTE: Always apply any credential data directly through the command line or use a secret management solution whenever possible! Be careful to never commit any credential data to any repository, even a private one! [Nefarious individuals](https://digitalguardian.com/blog/deloitte-hack-underscores-risk-credential-leaks) are [always](https://docs.aws.amazon.com/general/latest/gr/aws-access-keys-best-practices.html) crawling [repos](https://www.theregister.co.uk/2015/01/06/dev_blunder_shows_github_crawling_with_keyslurping_bots/) for this data and they [will use it](http://vertis.io/2013/12/16/unauthorised-litecoin-mining.html)!**
 
 Add a ```provider``` block to one of your *.tf files that utilizes a service principle. This requires that you create a service principle account to your cloud provider tenant. Instructions for creating the account and using its credentials can be found on the [backend type page](https://www.terraform.io/docs/backends/types/index.html) published by Hashicorp. Adding the service principle should show no needed changes to your resources once it authenticates successfully.
 
