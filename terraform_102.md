@@ -89,10 +89,10 @@ The azurerm provider requires contributor access to an Azure subscription in ord
 ```
 provider "azurerm" {
     version         = "~> 1.22"
-    subscription_id = "${var.azure_sub_id}"
-    client_id       = "${var.azure_client_id}"
-    client_secret   = "${var.azure_client_secret}"
-    tenant_id       = "${var.azure_tenant_id}"
+    subscription_id = var.azure_sub_id
+    client_id       = var.azure_client_id
+    client_secret   = var.azure_client_secret
+    tenant_id       = var.azure_tenant_id
 }
 ```
 
@@ -104,10 +104,10 @@ Terraform [modules](https://www.terraform.io/docs/modules/index.html) simply con
 module "sccm_sn" {
     source                        = "./terraform_naming_module"
         resource_type_input       = "subnet"
-        business_unit_input       = "${var.business_unit}"
+        business_unit_input       = var.business_unit
         workload                  = "SCCM"
-        environment_input         = "${var.environment}"
-        location_descriptor_input = "${var.location}"
+        environment_input         = var.environment
+        location_descriptor_input = var.location
         naming_index              = "01"
 }
 ```
