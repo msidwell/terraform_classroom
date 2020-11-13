@@ -1,21 +1,22 @@
 - [Terraform 101](#terraform-101)
   - [1.1.1 Basics](#111-basics)
   - [1.1.2 Resource Blocks](#112-resource-blocks)
-  - [1.1.3 Variable Blocks](#113-variable-blocks)
-  - [1.1.4 Terraform Commands](#114-terraform-commands)
-  - [1.1.5 Creating Terraform Files](#115-creating-terraform-files)
+  - [1.1.3 Implicit Dependency](#113-implicit-dependency)
+  - [1.1.4 Variable Blocks](#114-variable-blocks)
+  - [1.1.5 Terraform Commands](#115-terraform-commands)
+  - [1.1.6 Creating Terraform Files](#116-creating-terraform-files)
 - [Labs](#labs)
   - [Exercise 1: Creating a Resource](#exercise-1-creating-a-resource)
   - [Exercise 2: Using Variables](#exercise-2-using-variables)
-  - [Exercise 3: Organizing with .tf Files](#exercise-3-organizing-with-tf-files)
+  - [Exercise 3: Organizing Projects with .tf Files](#exercise-3-organizing-projects-with-tf-files)
 
 # Terraform 101
 
 ## 1.1.1 Basics
 
-Terraform is an open source Infrastructure-as-Code (IaC) solution for idempotent multi-cloud infrastructure management. Infrastructure components are defined as declarative code in the form of resource blocks which are stored within Terraform configuration files. Resource blocks define all aspects of a given resource within the bounds of the Terraform provider which handles communication of Terraform code to the resource provider API.
+Terraform is an open source Infrastructure-as-Code (IaC) tool for idempotent poly-cloud infrastructure management. Infrastructure components are defined as declarative code in the form of resource blocks which are stored within Terraform configuration files. Resource blocks define all aspects of a given resource within the bounds of the Terraform provider which handles communication of Terraform code to the resource provider API.
 
-Terraform code is written in [Hashicorp Configuration Language](https://github.com/hashicorp/hcl) (HCL). This language follows a block-based structure allowing for simple constrcution and readability. The declarative syntax of Terraform allows for a wide range of choices when it comes to organization. Any and all \*.tf files within the working directory willbe loaded by Terraform when it is called. For this reason, it is trivial to break up a set of configuration files into directories with separate variable files. File structure and file distribution can change depending on the complexity and needs of a given deployment.
+Terraform code is written in [Hashicorp Configuration Language](https://github.com/hashicorp/hcl) (HCL). The language syntax follows a block-based structure similar to JSON which enables quick construction and simple readability. The structure of Terraform files allows for a wide range of choices when it comes to project organization. Any and all \*.tf files within the working directory will be loaded by Terraform when it is called. For this reason, it is straightforward to break up a set of configuration files into directories with separate variable files. File structure and file distribution can change depending on the complexity and needs of a given deployment.
 
 ## 1.1.2 Resource Blocks
 
@@ -34,32 +35,36 @@ The two strings after **resource** are the resource type and resource ID respect
 
 Key-value pairs within the resource block define the configuration of the given resource. Required and optional keys are given by the azurerm provider specifications.
 
-## 1.1.3 Variable Blocks
+## 1.1.3 Implicit Dependency
+
+
+
+## 1.1.4 Variable Blocks
 
 [Variables](https://www.terraform.io/docs/configuration/variables.html) in Terraform are declared using variable blocks like the example below. They have type, description, and default parameters. The type parameter defines the variable as a string, list, or map. Descriptions simply act as a comment which gives context to a variable.  The default parameter defines the default value of the variable in the event that it is not explicitly set.
 
 ```
 variable "dataDiskCaching" {
-  type        = "string"
+  type        = string
   description = "Caching for data disk (None, ReadOnly, or ReadWrite)"
   default     = "ReadOnly"
 }
 ```
 
-Variables can be referenced in multiple ways. They can be explicitly defined within a variables file using **variable** blocks, environment variables, of runtime command line inputs. In addition, they can be implicitly defined using references to resource blocks by using their type and ID. The previous example **resource** block has been copied below with a few modifications to showcase the utility of variables in Terraform.
+Variables can be referenced in multiple ways. They are explicitly defined within a variables file using **variable** blocks, with inputs provided by input calue files, environment variables, or runtime command line inputs. In addition, they can be implicitly referenced using paths to resource block attributes by using their type and ID. The previous example **resource** block has been recreated below with a few modifications to showcase the utility of variables and implicit references in Terraform.
 
 ```
 resource "azurerm_subnet" "subnet" {
     name = "${var.prefix}subnet"
-    virtual_network_name = "${azurerm_virtual_network.vnet.name}"
-    resource_group_name = "${azurerm_resource_group.tf_azure_guide.name}"
-    address_prefix = "${var.subnet_prefix}"
+    virtual_network_name = azurerm_virtual_network.vnet.name
+    resource_group_name = azurerm_resource_group.tf_azure_guide.name
+    address_prefix = var.subnet_prefix
 }
 ```
 
 Variables are called by using “${}” sets. The entries which start with “var.\*” refer to explicit variables, while the ones that start with a resource type and ID refer to other existing configuration values within the Terraform deployment. Implicit variable references also create dependency links which define the order in which resources must be created.
 
-## 1.1.4 Terraform Commands
+## 1.1.5 Terraform Commands
 
 The Terraform CLI has a compact set of commands for managing deployments. The general flow of a Terraform deployment consists of init, plan, and apply steps. There are other more advanced commands, but those are for specific circumstances which fall outside the scope of this document.
 
@@ -69,7 +74,7 @@ Terraform [plan](https://www.terraform.io/docs/commands/plan.html) performs a st
 
 Terraform [apply](https://www.terraform.io/docs/commands/apply.html) performs the actual deployment of resources into a given environment. By default, it requires user input to confirm a deployment but the “-autoapprove” flag skips this step. As mentioned above, it will run a plan step on its own or can be fed a plan file with an expected run set.
 
-## 1.1.5 Creating Terraform Files
+## 1.1.6 Creating Terraform Files
 
 File structures in a Terraform deployments are quite flexible, though there are a few organizational tricks to keep in mind. There are three file extension patterns to be aware of, namely ```*.tf```, ```*.tfvars```, and ```*.auto.tfvars``` which each have unique usages. ```*.tf``` files contain any sort of HCL block and are automatically loaded by Terraform if they are in the working directory. ```*.tfvars``` files contain key=value pairs which set variable values for variables declared in ```*.tf``` files but must be intentionally loaded at runtime by using the ```--var-file``` parameter. Alternatively, ```*.auto.tfvars``` files are the same as the previous ```*.tfvars``` files except they will automatically be loaded into memory by Terraform if they are in the working directory. In most deployments, it is sufficient to use one ```*.tf``` file for resource blocks, another for variable blocks, and a final ```*.tfvars``` file for inputting variable values.
 
@@ -77,7 +82,7 @@ File structures in a Terraform deployments are quite flexible, though there are 
 
 ## Exercise 1: Creating a Resource
 
-Create a resource block for your preferred resource provider. Good starting resources are resources with few required parameters like an [AWS S3 bucket](https://www.terraform.io/docs/providers/aws/r/s3_bucket.html) or [Azure resource group](https://www.terraform.io/docs/providers/azurerm/r/resource_group.html).
+Create a resource block for your preferred resource provider. Good starting resources are ones with few required parameters like an [AWS S3 bucket](https://www.terraform.io/docs/providers/aws/r/s3_bucket.html) or [Azure resource group](https://www.terraform.io/docs/providers/azurerm/r/resource_group.html).
 
 Test the structure of your .tf file by running ```terraform init``` or ```terraform validate```. Make sure you try actually deploying the resource by using your preferred CLI to login to the resource provider and running ```terraform apply```. For instance, log into the [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html) using ```aws configure``` or log into the [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/reference-index?view=azure-cli-latest#az-login) using ```az login```
 
@@ -92,6 +97,6 @@ As before, make sure to test your configuration using a combination of ```terraf
 
 Your resource block should look similar to the resource example in [section 1.1.3](#13-variable-blocks), and it should be accompanied by a number of variable blocks which look like the example declaration in that same section.
 
-## Exercise 3: Organizing with .tf Files
+## Exercise 3: Organizing Projects with .tf Files
 
 Using the file contents from the [second exercise]((#exercise-2-using-variables)), create a second .tf file and move your variable declarations to it. Test and apply your configuration and see that it creates the same resource as your answer form the previous exercise.
