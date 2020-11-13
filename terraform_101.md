@@ -1,7 +1,7 @@
 - [Terraform 101](#terraform-101)
   - [1.1.1 Basics](#111-basics)
   - [1.1.2 Resource Blocks](#112-resource-blocks)
-  - [1.1.3 Implicit Dependency](#113-implicit-dependency)
+  - [1.1.3 Implicit Dependencies](#113-implicit-dependencies)
   - [1.1.4 Variable Blocks](#114-variable-blocks)
   - [1.1.5 Terraform Commands](#115-terraform-commands)
   - [1.1.6 Creating Terraform Files](#116-creating-terraform-files)
@@ -35,9 +35,20 @@ The two strings after **resource** are the resource type and resource ID respect
 
 Key-value pairs within the resource block define the configuration of the given resource. Required and optional keys are given by the azurerm provider specifications.
 
-## 1.1.3 Implicit Dependency
+## 1.1.3 Implicit Dependencies
 
+A key feature of HCL is the ability to implicitly create a dependency graph by [referencing attributes of different resource blocks](https://www.terraform.io/docs/configuration/expressions.html#references-to-resource-attributes) when resources depend on a previous object to successfully provision. It is best practice to use these references wherever possible rather than hardcoding values in order to make configurations more flexible and race condition resistant. These references are defined using paths to remote resource block attributes by using their type, ID, and attribute name. The previous example **resource** block has been recreated below with a few modifications to showcase the syntax of implicit references in Terraform.
 
+```
+resource "azurerm_subnet" "subnet" {
+    name = "mySubnet"
+    virtual_network_name = azurerm_virtual_network.vnet.name
+    resource_group_name = azurerm_resource_group.tf_azure_guide.name
+    address_prefix = "10.0.0.0/27"
+}
+```
+
+Now that the parent virtual network and resource group are implicitly referenced, Terraform will not create this resource until those two resources have been successfully provisioned. This not only prevents race conditions during initial deployment, but also links the lifecycle of parent-child relationships so that any update or recreation workflows perform any required changes to all associated resources.
 
 ## 1.1.4 Variable Blocks
 
@@ -51,7 +62,7 @@ variable "dataDiskCaching" {
 }
 ```
 
-Variables can be referenced in multiple ways. They are explicitly defined within a variables file using **variable** blocks, with inputs provided by input calue files, environment variables, or runtime command line inputs. In addition, they can be implicitly referenced using paths to resource block attributes by using their type and ID. The previous example **resource** block has been recreated below with a few modifications to showcase the utility of variables and implicit references in Terraform.
+Variables are explicitly defined within a variables file using **variable** blocks, with inputs provided by input calue files, environment variables, or runtime command line inputs. The previous example **resource** block has been updated with variable entries to remove all hardcoded values, making it highly modular and flexible for future changes.
 
 ```
 resource "azurerm_subnet" "subnet" {
@@ -62,7 +73,7 @@ resource "azurerm_subnet" "subnet" {
 }
 ```
 
-Variables are called by using “${}” sets. The entries which start with “var.\*” refer to explicit variables, while the ones that start with a resource type and ID refer to other existing configuration values within the Terraform deployment. Implicit variable references also create dependency links which define the order in which resources must be created.
+Variable references start with “var.\*” followed by the desired variable ID. Any changes to input values during deployment will automatically update the values in any reference to a given variable. A key syntax element to highlight above is the use of "${}" which generates [interpolated strings](https://www.terraform.io/docs/configuration/expressions.html#interpolation) for dynamic string generation at runtime.
 
 ## 1.1.5 Terraform Commands
 
