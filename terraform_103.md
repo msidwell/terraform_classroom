@@ -24,6 +24,37 @@ These blocks can optionally include the additional parameters ```description```,
 
 ## 1.3.2 Import Resources
 
+Terraform [```import```](https://www.terraform.io/docs/import/index.html) is a utility that programmatically imports resources not currently managed by a Terraform deployment into a Terraform state file. This is commonly used for slowly transitioning a given set of existing infrastructure for a previously developed service into Terraform management to take advantage of Terraform's state management capabilities. As of version 0.13, the ```import``` command only pulls resources into the state tree and does not write ```resource``` blocks to support the imported resource. Therefore, a "skeleton" ```resource``` block that defines the resrouce type and ID of the target resource is the bare minimum required information for ```import``` to function. A simple workflow for importing a given infrastructure component consists of:
+
+  1. Write a ```resource``` block skeleton that defined the resource type and ID for ```import``` to leverage during state file modification
+```
+resource "aws_s3_bucket" "legacy" {
+}
+```
+  2. Run the ```import``` command against a given remote resource URI that targets the newly written ```resource``` skeleton type and ID
+```
+terraform import aws_s3_bucket.legacy old-bucket-c86e32e0
+```
+  3. Run the ```state show``` command against the newly imported resource to view the parameters of the remote infrastructure
+
+![](_img/tf_classroom_103_state_show.png)
+
+  4. Update the skeleton ```resource``` block to match required and non-default parameters of the remote infrastructure
+```
+resource "aws_s3_bucket" "legacy" {
+    bucket = "old-bucket-c86e32e0"
+    acl    = "private"
+
+    tags   = {
+        environment = "dev"
+        expiration  = "never"
+        owner       = "root"
+        service     = "k8s"
+    }
+}
+```
+  5. Run a ```plan``` to confirm that all parameters match and, if required, update the ```resource``` block as needed to ensure no changes will be made to the remote resource
+   
 ## 1.3.3 Functions
 
 # Labs
