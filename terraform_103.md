@@ -54,7 +54,9 @@ resource "aws_s3_bucket" "legacy" {
 }
 ```
   5. Run a ```plan``` to confirm that all parameters match and, if required, update the ```resource``` block as needed to ensure no changes will be made to the remote resource
-   
+
+![](_img/tf_classroom_103_plan.png)
+
 ## 1.3.3 Functions
 
 # Labs
