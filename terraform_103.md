@@ -59,6 +59,92 @@ resource "aws_s3_bucket" "legacy" {
 
 ## 1.3.3 Functions
 
+[Functions](https://www.terraform.io/docs/configuration/functions.html) in HCL provide capabilities to transform values and automate common infrastructure designs such as CIDR block segmentation. Leveraging these capabilities not only saves time and effort when developing infrastructure templates, but also improves readability of complex deployments by dramatically reducing the number of lines needed to express in-depth logic. Functions follow a familiar pattern of ```functionName(parameter1, parameter2)``` similar to many other programming languages. 
+
+Consider a scenario where multiple subnets are used to ensure resources are appropriately provisioned across availability zones to ensure high availability. Without the use of functions, the resulting code is lengthy, difficult to read, and requires multiple hardcoded values. To preface this example we first define the variables and base VPC to use in a our deployment.
+```
+variable "region" {
+    type = string
+    default = "us-west-2"
+    description = "Region for deployment"
+}
+
+variable "vpc_cidr" {
+    type = string
+    default = "172.20.0.0/16"
+    description = "Parent domain name"
+}
+
+locals {
+  az = [
+    "${var.region}a",
+    "${var.region}b",
+    "${var.region}c"
+  ]
+}
+
+resource "aws_vpc" "core" {
+  cidr_block           = var.vpc_cidr
+}
+```
+Without using functions, the template for highly available subnets is defined in a verbose manner like below.
+```
+###Private Subnets###
+resource "aws_subnet" "private_a" {
+  availability_zone = local.az[0]
+  vpc_id            = aws_vpc.core.id
+  cidr_block        = "172.20.0.0/22"
+}
+
+resource "aws_subnet" "private_b" {
+  availability_zone = local.az[0]
+  vpc_id            = aws_vpc.core.id
+  cidr_block        = "172.20.4.0/22"
+}
+
+resource "aws_subnet" "private_c" {
+  availability_zone = local.az[0]
+  vpc_id            = aws_vpc.core.id
+  cidr_block        = "172.20.8.0/22"
+}
+
+###Public Subnets###
+resource "aws_subnet" "public_a" {
+  availability_zone = local.az[0]
+  vpc_id            = aws_vpc.core.id
+  cidr_block        = "172.20.32.0/19"
+}
+
+resource "aws_subnet" "public_b" {
+  availability_zone = local.az[1]
+  vpc_id            = aws_vpc.core.id
+  cidr_block        = "172.20.64.0/19"
+}
+
+resource "aws_subnet" "public_c" {
+  availability_zone = local.az[2]
+  vpc_id            = aws_vpc.core.id
+  cidr_block        = "172.20.96.0/19"
+}
+```
+However by using the ```count``` parameter along with ```length()``` and ```cidrsubnet()``` functions the code is significantly more compact, modular, and human-readable.
+```
+###Private Subnets###
+resource "aws_subnet" "private" {
+  count             = length(local.az)
+  availability_zone = local.az[count.index % 3]
+  vpc_id            = aws_vpc.core.id
+  cidr_block        = cidrsubnet(aws_vpc.core.cidr_block, 6, count.index)
+}
+
+###Public Subnets###
+resource "aws_subnet" "public" {
+  count             = length(local.az)
+  availability_zone = local.az[count.index % 3]
+  vpc_id            = aws_vpc.core.id
+  cidr_block        = cidrsubnet(aws_vpc.core.cidr_block, 3, count.index + 1)
+}
+```
 # Labs
 
 ## Exercise 1: Generate Outputs
