@@ -72,7 +72,7 @@ variable "region" {
 variable "vpc_cidr" {
     type = string
     default = "172.20.0.0/16"
-    description = "Parent domain name"
+    description = "Core VPC CIDR"
 }
 
 locals {
