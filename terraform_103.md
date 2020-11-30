@@ -84,7 +84,7 @@ locals {
 }
 
 resource "aws_vpc" "core" {
-  cidr_block           = var.vpc_cidr
+  cidr_block = var.vpc_cidr
 }
 ```
 Without using functions, the template for highly available subnets is defined in a verbose manner like below.
