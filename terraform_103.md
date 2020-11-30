@@ -61,7 +61,7 @@ resource "aws_s3_bucket" "legacy" {
 
 [Functions](https://www.terraform.io/docs/configuration/functions.html) in HCL provide capabilities to transform values and automate common infrastructure designs such as CIDR block segmentation. Leveraging these capabilities not only saves time and effort when developing infrastructure templates, but also improves readability of complex deployments by dramatically reducing the number of lines needed to express in-depth logic. Functions follow a familiar pattern of ```functionName(parameter1, parameter2)``` similar to many other programming languages. 
 
-Consider a scenario where multiple subnets are used to ensure resources are appropriately provisioned across availability zones to ensure high availability. Without the use of functions, the resulting code is lengthy, difficult to read, and requires multiple hardcoded values. To preface this example we first define the variables and base VPC to use in a our deployment.
+Consider a scenario where multiple subnets are used to ensure resources are appropriately provisioned across availability zones to ensure high availability. Without the use of functions, the resulting code is lengthy, difficult to read, and requires multiple hardcoded values. To preface this example we first define the variables and base VPC to use in our deployment.
 ```
 variable "region" {
     type = string
