@@ -89,7 +89,7 @@ resource "aws_vpc" "core" {
 ```
 Without using functions, the template for highly available subnets is defined in a verbose manner like below.
 ```
-###Private Subnets###
+#Private Subnets
 resource "aws_subnet" "private_a" {
   availability_zone = local.az[0]
   vpc_id            = aws_vpc.core.id
@@ -108,7 +108,7 @@ resource "aws_subnet" "private_c" {
   cidr_block        = "172.20.8.0/22"
 }
 
-###Public Subnets###
+#Public Subnets
 resource "aws_subnet" "public_a" {
   availability_zone = local.az[0]
   vpc_id            = aws_vpc.core.id
@@ -129,7 +129,7 @@ resource "aws_subnet" "public_c" {
 ```
 However by using the [```count```](https://www.terraform.io/docs/configuration/resources.html#count-multiple-resource-instances-by-count) meta-argument along with [```length()```](https://www.terraform.io/docs/configuration/functions/length.html) and [```cidrsubnet()```](https://www.terraform.io/docs/configuration/functions/cidrsubnet.html) functions the code is significantly more compact, modular, and human-readable.
 ```
-###Private Subnets###
+#Private Subnets
 resource "aws_subnet" "private" {
   count             = length(local.az)
   availability_zone = local.az[count.index % 3]
@@ -137,7 +137,7 @@ resource "aws_subnet" "private" {
   cidr_block        = cidrsubnet(aws_vpc.core.cidr_block, 6, count.index)
 }
 
-###Public Subnets###
+#Public Subnets
 resource "aws_subnet" "public" {
   count             = length(local.az)
   availability_zone = local.az[count.index % 3]
