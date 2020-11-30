@@ -3,9 +3,9 @@
   - [1.3.2 Import Resources](#132-import-resources)
   - [1.3.3 Functions](#133-functions)
 - [Labs](#labs)
-  - [Exercise 1: Generate Outputs](#exercise-1-generate-outputs)
+  - [Exercise 1: Leverage Functions](#exercise-1-leverage-functions)
   - [Exercise 2: Import Existing Resources](#exercise-2-import-existing-resources)
-  - [Exercise 3: Leverage Functions](#exercise-3-leverage-functions)
+  - [Exercise 3: Generate Deployment Outputs](#exercise-3-generate-deployment-outputs)
 
 # Terraform 103
 
@@ -127,7 +127,7 @@ resource "aws_subnet" "public_c" {
   cidr_block        = "172.20.96.0/19"
 }
 ```
-However by using the ```count``` parameter along with ```length()``` and ```cidrsubnet()``` functions the code is significantly more compact, modular, and human-readable.
+However by using the [```count```](https://www.terraform.io/docs/configuration/resources.html#count-multiple-resource-instances-by-count) meta-argument along with [```length()```](https://www.terraform.io/docs/configuration/functions/length.html) and [```cidrsubnet()```](https://www.terraform.io/docs/configuration/functions/cidrsubnet.html) functions the code is significantly more compact, modular, and human-readable.
 ```
 ###Private Subnets###
 resource "aws_subnet" "private" {
@@ -147,8 +147,14 @@ resource "aws_subnet" "public" {
 ```
 # Labs
 
-## Exercise 1: Generate Outputs
+## Exercise 1: Leverage Functions
+
+Using the AWS VPC definitions from [1.3.3](#133-functions) as a guide, add code to your deployment from [Exercise 2: Automating Your Environment with a Service Principle](#exercise-2-automating-your-environment-with-a-service-principle) to create a similar VPC design with multiple subnets that each reside in unique availability zones. Try modifying the parameters of the ```cidrsubnet()``` function and observe their effects.
 
 ## Exercise 2: Import Existing Resources
 
-## Exercise 3: Leverage Functions
+Manually deploy an additional subnet into the VPC deployed in [Exercise 1: Leverage Functions](#exercise-1-leverage-functions) via the GUI console. Once the subnet is provisioned, follow the import process described in [1.3.2 Import Resources](#132-import-resources) to bring the new subnet under Terraform control.
+
+## Exercise 3: Generate Deployment Outputs
+
+Define ```output``` blocks that return the CIDR ranges used by the public and private subnets deployed in the previous exercises.
