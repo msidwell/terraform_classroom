@@ -132,7 +132,7 @@ However by using the [```count```](https://www.terraform.io/docs/configuration/r
 #Private Subnets
 resource "aws_subnet" "private" {
   count             = length(local.az)
-  availability_zone = local.az[count.index % 3]
+  availability_zone = local.az[count.index % length(local.az)]
   vpc_id            = aws_vpc.core.id
   cidr_block        = cidrsubnet(aws_vpc.core.cidr_block, 6, count.index)
 }
@@ -140,7 +140,7 @@ resource "aws_subnet" "private" {
 #Public Subnets
 resource "aws_subnet" "public" {
   count             = length(local.az)
-  availability_zone = local.az[count.index % 3]
+  availability_zone = local.az[count.index % length(local.az)]
   vpc_id            = aws_vpc.core.id
   cidr_block        = cidrsubnet(aws_vpc.core.cidr_block, 3, count.index + 1)
 }
